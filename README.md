@@ -16,6 +16,10 @@ Mostly this year has been about improving my engine and I feel that I've accompl
 
 After my first entry (Badluck butter chicken flies the ufriendly skies) I wondered what else I could accomplish with the engine in its current state and by reusing the assets created for the first entry.
 
+I'm more than happy with the result. My first entry took a couple of weeks to complete, and this entry only took about four days.
+
+I wonder how many low effort games I can shovel out next year.
+
 ### Graphics
 
 I learned more about SVG imagery, especially when it comes to generating them with code.
