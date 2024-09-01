@@ -2,7 +2,7 @@
 // My 2024 entry for js13k (https://js13kgames.com/).
 // By Cliff Earl, Antix Development, 2024 (https://github.com/Antix-Development).
 
-const log = (t) => console.log(t); // REMOVE FOR PRODUCTION.
+// const log = (t) => console.log(t); // REMOVE FOR PRODUCTION.
 
 // Math variables.
 const M = Math;
@@ -915,7 +915,6 @@ const randomHeading = (x, y, padding = 128) => (angleToCenter(x, y, randomInt(CE
 
 // Create a new actor object with the given attributes.
 const newActor = (type, x, y, vx, vy, texture, radius, alpha, scale, angle, rotationRate, ttl, gx, gy, fades, shrinks) => ({
-  // Player, Mongol, Projectile, Particle.
   type,
 
   x,
@@ -1268,7 +1267,7 @@ const allAssetsLoaded = e => {
   appendElementTo(newTextLabel(TYPE_H2, 'BadLuck', 60, 60), m);
   appendElementTo(newTextLabel(TYPE_H3, 'Butter', 182, 232), m);
   appendElementTo(newTextLabel(TYPE_H2, 'Chicken', 460, 220), m);
-  appendElementTo(newTextLabel(TYPE_H6, 'Goes To Outer Space', 640, 400), m);
+  appendElementTo(newTextLabel(TYPE_H6, 'Goes To Outer Space', 640, 420), m);
   appendElementTo(chicky, m); // Move from assets container to main menu.
   setElementPosition(chicky, 990, 60);
   chicky.style.transform = 'rotate(-45deg)';
@@ -2147,7 +2146,7 @@ onEnterFrame = (t) => {
       spawnCoinX(ACTOR_TYPE_COIN_PICKUP, 250, 'coin0', randomInt(0, 9));
     }
 
-    MULTIPLIER = clamp(MULTIPLIER + 0.003, 0, 2.5); // Scale base speed of mongols and their projectiles.
+    MULTIPLIER = clamp(MULTIPLIER + 0.003, 0, 2.5); // Scale base speed of enemies.
 
 // #region Process player.
 
