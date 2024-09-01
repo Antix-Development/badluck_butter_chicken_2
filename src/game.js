@@ -165,9 +165,6 @@ gl2_drawImage = (sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, dest
     positions = gl2_positions, // Use a local variable so it's faster to access.
 
     i = gl2_draws * 6;
-
-  // console.log(rgba);
-
   gl2_rgbas[i + 4] = rgba || 0xFFFFFF7F; // Store rgba after position/texture. Default to white and fully opaque.
   gl2_rotations[i + 5] = rotation || 0; // Store how rotated we want this image to be.
 
@@ -1941,8 +1938,6 @@ class Rope {
     }
 
     points[0].isFixed = points[points.length - 1].isFixed = true;
-
-    log(points);
 
     return points;
   }
