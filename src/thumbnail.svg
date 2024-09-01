@@ -1,0 +1,63 @@
+<svg id="svg16" width="3200" height="3200" version="1.1" viewBox="0 0 3200 3200" xmlns="http://www.w3.org/2000/svg">
+ <defs id="defs7">
+  <filter id="filter198" x="0" y="0" width="1.02" height="1.08" color-interpolation-filters="sRGB">
+   <feTurbulence id="feTurbulence1" baseFrequency="0.01 0.01" numOctaves="2" result="turbulence" seed="1" type="fractalNoise"/>
+   <feDisplacementMap id="feDisplacementMap1" in="SourceGraphic" in2="turbulence" result="fbSourceGraphic" scale="25" xChannelSelector="R" yChannelSelector="G"/>
+   <feColorMatrix id="feColorMatrix1" in="fbSourceGraphic" result="fbSourceGraphicAlpha" values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"/>
+   <feFlood id="feFlood1" flood-color="rgb(85,119,170)" in="fbSourceGraphic" result="flood"/>
+   <feGaussianBlur id="feGaussianBlur1" in="fbSourceGraphic" result="blur" stdDeviation="0.000000"/>
+   <feOffset id="feOffset1" dx="35.000000" dy="35.000000" in="blur" result="offset"/>
+   <feComposite id="feComposite1" in="flood" in2="offset" operator="in" result="comp1"/>
+   <feComposite id="feComposite2" in="fbSourceGraphic" in2="comp1" result="comp2"/>
+  </filter>
+  <filter id="filter198-7" x="0" y="0" width="1.01" height="1.08" color-interpolation-filters="sRGB">
+   <feTurbulence id="feTurbulence2" baseFrequency="0.01 0.01" numOctaves="2" result="turbulence" seed="1" type="fractalNoise"/>
+   <feDisplacementMap id="feDisplacementMap2" in="SourceGraphic" in2="turbulence" result="fbSourceGraphic" scale="25" xChannelSelector="R" yChannelSelector="G"/>
+   <feColorMatrix id="feColorMatrix2" in="fbSourceGraphic" result="fbSourceGraphicAlpha" values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"/>
+   <feFlood id="feFlood2" flood-color="rgb(85,119,170)" in="fbSourceGraphic" result="flood"/>
+   <feGaussianBlur id="feGaussianBlur2" in="fbSourceGraphic" result="blur" stdDeviation="0.000000"/>
+   <feOffset id="feOffset2" dx="35.000000" dy="35.000000" in="blur" result="offset"/>
+   <feComposite id="feComposite3" in="flood" in2="offset" operator="in" result="comp1"/>
+   <feComposite id="feComposite4" in="fbSourceGraphic" in2="comp1" result="comp2"/>
+  </filter>
+  <filter id="filter198-5" x="0" y="0" width="1.01" height="1.06" color-interpolation-filters="sRGB">
+   <feTurbulence id="feTurbulence4" baseFrequency="0.01 0.01" numOctaves="2" result="turbulence" seed="1" type="fractalNoise"/>
+   <feDisplacementMap id="feDisplacementMap4" in="SourceGraphic" in2="turbulence" result="fbSourceGraphic" scale="25" xChannelSelector="R" yChannelSelector="G"/>
+   <feColorMatrix id="feColorMatrix4" in="fbSourceGraphic" result="fbSourceGraphicAlpha" values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"/>
+   <feFlood id="feFlood4" flood-color="rgb(85,119,170)" in="fbSourceGraphic" result="flood"/>
+   <feGaussianBlur id="feGaussianBlur4" in="fbSourceGraphic" result="blur" stdDeviation="0.000000"/>
+   <feOffset id="feOffset4" dx="35.000000" dy="35.000000" in="blur" result="offset"/>
+   <feComposite id="feComposite5" in="flood" in2="offset" operator="in" result="comp1"/>
+   <feComposite id="feComposite6" in="fbSourceGraphic" in2="comp1" result="comp2"/>
+  </filter>
+  <linearGradient id="linearGradient38" x1="-4736" x2="-736" y1="-6494" y2="-6494" gradientTransform="translate(4736,7744)" gradientUnits="userSpaceOnUse">
+   <stop id="stop6" stop-color="#05222e" offset="0"/>
+   <stop id="stop7" stop-color="#0a3943" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g id="g7" transform="matrix(.8 0 0 1.28 0 .477)" fill-rule="evenodd">
+  <path id="path7" transform="matrix(.265 0 0 .276 253 2385)" d="m-61.5 173-106-57.9-118 51.5 22.4-119-85.5-96.3 120-15.3 65.2-111 51.5 109 126 27.7-87.8 82.7z" fill="#f7ec1d"/>
+  <text id="text7" x="-1904" y="-3617.3125" fill="#78fed0" font-size="192px" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="6" xml:space="preserve"><tspan id="tspan7" x="-1904" y="-3617.3125"/></text>
+  <rect id="rect7" y="-.373" width="4e3" height="2500" fill="url(#linearGradient38)" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="6"/>
+ </g>
+ <g id="g11" transform="matrix(.845 .926 -.926 .845 1012 1019)" fill-rule="evenodd">
+  <rect id="rect8" x="10.7" y="10.7" width="1e3" height="1e3" rx="128" fill="#fff" stroke="#000" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="21.3"/>
+  <g id="g10" stroke-width="10.7">
+   <path id="path8" d="m512 672c-135 0-252 38.3-352 105 73.4 39.4 203 65.5 352 65.5s279-26.2 352-65.5c-101-66.7-217-105-352-105z" fill="#f7941d"/>
+   <rect id="rect9" x="277" y="405" width="85.3" height="85.3" rx="42.7"/>
+   <rect id="rect10" x="661" y="405" width="85.3" height="85.3" rx="42.7"/>
+   <path id="path10" d="m290 60.5a256 341 0 006.03 10.6 256 341 0 01-6.03-10.6zm422 .198a256 341 0 01-4.51 8.05 256 341 0 004.51-8.05zm-407 24.6a256 341 0 008.19 12.1 256 341 0 01-8.19-12.1zm392 1.43a256 341 0 01-5.22 7.93 256 341 0 005.22-7.93zm-182 19.2c-66.1 0-128 5.27-184 14.4a256 341 0 00170 84 256 341 0 00174-87.7c-49.3-6.88-103-10.7-160-10.7zm-194 1.75a256 341 0 0010.1 12.6 256 341 0 01-10.1-12.6z" fill="#af1e25"/>
+  </g>
+  <rect id="rect11" x="96.2" y="96.2" width="832" height="746" rx="416" ry="140" fill-opacity=".533" stroke="#000" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="21.8"/>
+ </g>
+ <g id="g13" transform="translate(-382 -69.8)" fill-rule="evenodd">
+  <rect id="rect12" x="1874" y="-924" width="3e3" height="3200" rx="3e3" fill="#8590a1"/>
+  <rect id="rect13" x="2137" y="-422" width="2550" height="2510" rx="3e3" fill="#586373"/>
+ </g>
+ <text id="text14" transform="matrix(.588 0 0 .588 2759 5314)" x="-2484.4158" y="-3940.613" fill="#ffffff" fill-rule="evenodd" filter="url(#filter198-5)" font-family="Arial" font-size="567px" font-weight="900" stroke-linecap="round" stroke-linejoin="bevel" stroke-opacity=".0667" stroke-width="16" xml:space="preserve"><tspan id="tspan14" x="-2484.4158" y="-3940.613" font-size="567px">Episode 2 </tspan></text>
+ <g id="g16" transform="matrix(.793 0 0 .793 28.6 -18.4)" fill="#ffffff" fill-rule="evenodd" font-family="Arial" font-size="640px" font-weight="900" stroke-linecap="round" stroke-linejoin="bevel" stroke-opacity=".0667" stroke-width="16">
+  <text id="text13" transform="matrix(.856 0 0 .856 9906 6543)" x="-9922.8916" y="-6202.0332" filter="url(#filter198)" xml:space="preserve"><tspan id="tspan13" x="-9922.8916" y="-6202.0332">Chicken</tspan></text>
+  <text id="text15" transform="matrix(.464 0 0 .464 4897 3031)" x="-9775.1875" y="-4533.875" filter="url(#filter198)" xml:space="preserve"><tspan id="tspan15" x="-9775.1875" y="-4533.875">Butter</tspan></text>
+  <text id="text16" transform="matrix(.856 0 0 .856 8712 6472)" x="-10063.292" y="-6859.9707" filter="url(#filter198-7)" xml:space="preserve"><tspan id="tspan16" x="-10063.292" y="-6859.9707">BadLuck</tspan></text>
+ </g>
+</svg>
