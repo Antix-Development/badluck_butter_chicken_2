@@ -5,19 +5,19 @@
 const log = (t) => console.log(t); // REMOVE FOR PRODUCTION.
 
 // Math variables.
-const M               = Math;
-const min             = M.min;
-const abs             = M.abs;
-const cos             = M.cos;
-const sin             = M.sin;
-const PI              = M.PI;
-const PI2             = PI * 2;
+const M = Math;
+const min = M.min;
+const abs = M.abs;
+const cos = M.cos;
+const sin = M.sin;
+const PI = M.PI;
+const PI2 = PI * 2;
 
 // Screen dimensions.
-const WIDTH           = 1920;
-const HEIGHT          = 1080;
-const CENTERX         = WIDTH / 2;
-const CENTERY         = HEIGHT / 2;
+const WIDTH = 1920;
+const HEIGHT = 1080;
+const CENTERX = WIDTH / 2;
+const CENTERY = HEIGHT / 2;
 
 const px = 'px';
 
@@ -30,14 +30,6 @@ const FX_MAGNET       = 4;
 const FX_BESTSCORE    = 5;
 const FX_CLOCK        = 6;
 
-// Easing function.
-// const easeInOutQuad = (t, b, c, d) => {
-//   t /= d / 2;
-//   if (t < 1) return c / 2 * t * t + b;
-//   t--;
-//   return -c / 2 * (t * (t - 2) - 1) + b;
-// };
-
 // Keyboard variables.
 let keysEnabled;
 let waitingForKey; // 1 if app is waiting for a new control key to be pressed.
@@ -47,11 +39,6 @@ let controlIndex; // Index of control key to be changed.
 let controlLabel; // UI element to change when new control is set.
 let CONTROL_LEFT = 0; // Indexes into keyboard control array.
 let CONTROL_RIGHT = 1;
-
-// Game modes.
-const GAME_MODE_MENUS = 0;
-const GAME_MODE_PLAYING = 1;
-const GAME_MODE_GAMEOVER = 2;
 
 // Game timing variables.
 let DT;
@@ -66,8 +53,12 @@ let activeMenu;
 let cursorVisible = 1;
 let gameMode;
 
-let MULTIPLIER = 1; // Multiplier for velocities used to increase difficulty over time.
+// Game modes.
+const GAME_MODE_MENUS = 0;
+const GAME_MODE_PLAYING = 1;
+const GAME_MODE_GAMEOVER = 2;
 
+let MULTIPLIER = 1; // Multiplier for velocities used to increase difficulty over time.
 
 // Score management.
 let playerScore;
@@ -120,34 +111,28 @@ let sun;
 let egg; // Big egg in the middle.
 
 let enemies;
-let ENEMY_SPAWN_RADIUS        = 1500;
-
+let ENEMY_SPAWN_RADIUS = 1500;
 let collisionsEnabled;
 
-let particles;
+let stars = [];
+starfield = {vx: 0, vy: 0, angle: 0, speed: 100};
+
+let particles = [];
 
 let renderList;
 
 // Actor types. NOTE: These values are also used for z-sorting.
 const ACTOR_TYPE_STAR           = 0;
 const ACTOR_TYPE_SUN            = 2;
-
-
 const ACTOR_TYPE_EGG            = 3;
-
 const ACTOR_TYPE_MAGNET_PICKUP  = 10;
 const ACTOR_TYPE_SHIELD_PICKUP  = 11;
 const ACTOR_TYPE_CLOCK_PICKUP   = 12;
-// MORE PICKUP TYPES HERE.
 const ACTOR_TYPE_COIN_PICKUP    = 19;
-
-
-const ACTOR_TYPE_ROPE           = 23;
+const ACTOR_TYPE_ROPE           = 20;
 const ACTOR_TYPE_ENEMY          = 25;
-
-const ACTOR_TYPE_PLAYER         = 34;
+const ACTOR_TYPE_PLAYER         = 30;
 const ACTOR_TYPE_SHIELD         = 35;
-
 const ACTOR_TYPE_PARTICLE       = 50;
 
 //#region gl2.js.
@@ -720,7 +705,6 @@ const playSound = id => {
 const playMusic = musicObject => {
 
   let samples = musicObject.samples;
-  // if (!samples) samples = renderMusic(...musicObject.module);
 
   const [buffer, gainNode] = playSamples(...samples);
 
@@ -820,24 +804,24 @@ const SVG_GRADIENT_COLOR_STOP = (color, opacity, offset) => (`<stop stop-color="
 // Show or hide the mouse cursor according to the given state.
 const showCursor = state => {
   if (state) {
-    if (!cursorVisible) b.style.cursor = 'pointer'; // Only show the cursor if it is not visible
+    if (!cursorVisible) b.style.cursor = 'pointer'; // Only show the cursor if it is not visible.
       
   } else {
-    if (cursorVisible) b.style.cursor = 'none'; // Only hide the cursor if it is visible
+    if (cursorVisible) b.style.cursor = 'none'; // Only hide the cursor if it is visible.
 
   }
-  cursorVisible = state; // Save the state
+  cursorVisible = state; // Save the state.
 };
 
 // HTML element types.  
-const TYPE_DIV    = 0;
+const TYPE_DIV = 0;
 const TYPE_BUTTON = 1;
-const TYPE_H1     = 2;
-const TYPE_H2     = 3;
-const TYPE_H3     = 4;
-const TYPE_H4     = 5;
-const TYPE_H5     = 6;
-const TYPE_H6     = 7;
+const TYPE_H1 = 2;
+const TYPE_H2 = 3;
+const TYPE_H3 = 4;
+const TYPE_H4 = 5;
+const TYPE_H5 = 6;
+const TYPE_H6 = 7;
 
 // Create a new HTML element of the given type.
 const createElement = (id, type) => {
@@ -917,7 +901,6 @@ const awardPoints = (n) => {
       gotBestScore = 1;
       spawningBestScoreEffects = 1;
       playSound(FX_BESTSCORE);
-
     }
   }
 };
@@ -928,6 +911,7 @@ const randomSpeed = e => (randomInt(70, 180));
 const randomAngle = e => (random() * PI2);
 const randomRotationDirection = e => ((random() < .5) ? -PI2 * .005 : PI2 * .005);
 const angleToCenter = (x, y, cx, cy) => (Math.atan2(cy - y, cx - x));
+const randomHeading = (x, y, padding = 128) => (angleToCenter(x, y, randomInt(CENTERX - padding, CENTERX + padding) , randomInt(CENTERY - padding, CENTERY + padding)));
 
 // Create a new actor object with the given attributes.
 const newActor = (type, x, y, vx, vy, texture, radius, alpha, scale, angle, rotationRate, ttl, gx, gy, fades, shrinks) => ({
@@ -1047,8 +1031,8 @@ const playButtonClicked = e => {
   stopMusic(menuMusicObject);
   playMusic(gameMusicObject);
 
+  // Reset umbilical cord.
   points = Rope.generate();
-
   rope = new Rope(points);
 
   // Reset magnet pickup.
@@ -1066,20 +1050,6 @@ const playButtonClicked = e => {
   clockCounter = 0;
   setHTML(clockCounterLabel, clockCounter);
   clockPickupSpawnTimer = 6 + random();  // Time till first ingame spawn.
-
-  // Create the shield graphic overlay.
-  shieldOverlay = newActor(
-    ACTOR_TYPE_SHIELD, // type
-    0,
-    HEIGHT - 100, // y
-    0, // vx
-    0,
-    getTextureRegion('shield'),
-    0,
-    1,
-    1,
-    0,
-  );
 
   // Reset "achieved best score" variables.
   gotBestScore = 0;
@@ -1168,16 +1138,6 @@ const optionsButtonClicked = e => {
   openMenu(o);
 };
 
-// Open the help menu.
-// const helpButtonClicked = e => {
-//   openMenu(h);
-// };
-
-// // Close the help menu.
-// const helpOkayButtonClicked = e => {
-//   openMenu(m);
-// };
-
 // Toggle audio output.
 const audioButtonClicked = e => {
   if (!paused) {
@@ -1198,8 +1158,8 @@ const pauseButtonClicked = e => {
 const toggleAudioButtonClicked = e => {
   resetKeyButtons();
   mutateAudioButton((OPTIONS.audio = !OPTIONS.audio));
-
 };
+
 const resetKeyButtons = e => {
   setButtonLabel(setKeyLeftButton, OPTIONS.controls[CONTROL_LEFT].code);
   setButtonLabel(setKeyRightButton, OPTIONS.controls[CONTROL_RIGHT].code);
@@ -1272,8 +1232,6 @@ const newTextureRegion = (name, x, y, scale = 1) => {
 // Get the texture region with the given name.
 getTextureRegion = (name) => (textureRegions[name]);
 
-let stars = [];
-
 // Initialize menus and other stuff, open the pre game menu, and start main game loop.
 const allAssetsLoaded = e => {
 
@@ -1285,6 +1243,8 @@ const allAssetsLoaded = e => {
 
   egg = newActor(ACTOR_TYPE_EGG, CENTERX, CENTERY, 0, 0, getTextureRegion('home'), 123, 1, 1, 0, 0);
 
+  shieldOverlay = newActor(ACTOR_TYPE_SHIELD, 0, HEIGHT - 100, 0, 0, getTextureRegion('shield'), 0, 1, 1, 0, );
+
   // 
   // Create parallax stars.
   // 
@@ -1293,16 +1253,11 @@ const allAssetsLoaded = e => {
   for (let i = 100; i--;) newStar(1);
   for (let i = 75; i--;) newStar(2);
   for (let i = 50; i--;) newStar(3);
-   
 
-
-  
-  
   // 
   // Create the pre game menu.
   // 
 
-  // appendElementTo(newTextLabel(TYPE_H2, 'BadLuck', 60, 60), v);
   appendElementTo(newTextButton(560, 430, 800, 220, 'Click Me', '99b', pregameButtonClicked), v);
   
   // 
@@ -1348,17 +1303,13 @@ const allAssetsLoaded = e => {
   // centerElement(playerScoreLabel);
   appendElementTo(newTextButton(32, 24, 110, 160, '\u2016', '8c2', pauseButtonClicked, 'pauseButton'), g);
   appendElementTo(newTextButton(1744, 24, 120, 160, '\u266b', '8c2', audioButtonClicked, 'audioButton'), g);
-
   setElementBackgroundColor(audioButton, (OPTIONS.audio) ? '8c2' : '888');
-
   appendElementTo(magnetPickup, g);
   setElementPosition(magnetPickup, 250, 32);
   appendElementTo(newTextLabel(TYPE_H3, '0', 350, 24, 'magnetCounterLabel'), g);
-
   appendElementTo(clockPickup, g);
   setElementPosition(clockPickup, 500, 32);
   appendElementTo(newTextLabel(TYPE_H3, '0', 600, 24, 'clockCounterLabel'), g);
-
   appendElementTo(shieldPickup, g);
   setElementPosition(shieldPickup, 750, 32);
   appendElementTo(newTextLabel(TYPE_H3, '0', 850, 24, 'shieldCounterLabel'), g);
@@ -1381,6 +1332,7 @@ const allAssetsLoaded = e => {
   // 
 
   b.style.display = 'block';
+
   onresize(); // Perform initial resize.
 
   // Open the main menu.
@@ -1586,14 +1538,6 @@ onload = e => {
   SVG_RECT(45, 16, 6, 36, `bbc`, 3) + 
   SVG_RECT(45, 47, 30, 6, `bbc`, 3); 
   newTextureRegion('clockPickup', 814, 300);
-  
-  // Egg.
-  svgString = SVG_HEAD(186, 256) + 
-  SVG_RECT(1.5, 1.5, 183, 253, 'db7', 183, 128, 3, '222') + 
-  SVG_RECT(11, 5, 144, 218, 'fc9', 144) + 
-  SVG_RECT(22, 83, 22, 58, 'fed', 58) + 
-  SVG_RECT(31, 52, 16, 24, 'fed', 24);
-  newTextureRegion('egg', 814, 400, .4);
 
   // Badluck butter chicken.
   svgString = SVG_HEAD(192, 192) +
@@ -1635,8 +1579,6 @@ onload = e => {
   
   // Key down event handler.
   onkeydown = e => {
-    // if (e.code != 'F5' || e.code != 'F11' || e.code != 'F2') e.preventDefault(); // We don't want to break the F5 key.
-
     if (keysEnabled && !waitingForKey) {
       const keyCode = e.code;
       if (!leftHeld && keyCode === OPTIONS.controls[CONTROL_LEFT].code) {
@@ -1652,8 +1594,6 @@ onload = e => {
 
   // Key up event handler
   onkeyup = e => {
-    // log(e);
-
     let keyCode = e.code;
 
     if (waitingForKey) {
@@ -1695,18 +1635,12 @@ onload = e => {
 
   // #endregion
 
-  particles = [];
-
 };
 
 // // Update particles.
 const updateParticles = () => {
-  // Process particles here so they appear on top of everything else
  
   if (particles.length) { // Check to be sure there is at least one partlcle
-
-    // log(particles);
-    // paused = 1;
 
     for (let i = particles.length; i--;) {
     // for (let i = particles.length - 1; i >= 0; i--) {
@@ -1739,36 +1673,6 @@ const updateParticles = () => {
     }
   }
 };
-
-const randomHeading = (x, y, padding = 128) => (angleToCenter(x, y, randomInt(CENTERX - padding, CENTERX + padding) , randomInt(CENTERY - padding, CENTERY + padding)));
-
-// Spawn a new coin.
-const spawnCoin = (x, y, speed, texture, type, frame) => {
-  const coin = coinPool.pop();
-
-  activeCoins.add(coin);
-
-  coin.type = type;
-
-  coin.texture = getTextureRegion(texture);
-  coin.frame = frame;
-  if (coin.type != ACTOR_TYPE_COIN_PICKUP) coin.rotationRate = randomRotationDirection();
-
-  let angle = randomAngle();
-
-  x = cos(angle) * ENEMY_SPAWN_RADIUS + CENTERX;
-  y = sin(angle) * ENEMY_SPAWN_RADIUS + CENTERY;
-
-  angle = randomHeading(x, y);
-
-  coinx = x;
-  coin.y = y;
-
-  coin.vx = speed * Math.cos(angle);
-  coin.vy = speed * Math.sin(angle);
-
-};
-
 
 // Spawn a new coin.
 const spawnCoinX = (type, speed, texture, frame) => {
@@ -1803,9 +1707,6 @@ const spawnCoinX = (type, speed, texture, frame) => {
     coin.vx = speed * Math.cos(heading);
     coin.vy = speed * Math.sin(heading);
   };
-
-
-
 
 // Spawn the given number of particles with the given image at the given actors position.
 const spawnRadialShower = (x, y, image) => {
@@ -2076,9 +1977,27 @@ class Rope {
 
 // #endregion
 
-starfield = {vx: 0, vy: 0, angle: 0, speed: 100};
+// Respawn the given enemy.
+const respawnEnemy = (enemy, speed) => {
+    
+  let angle = randomAngle();
+  enemy.rotationRate = randomRotationDirection();
 
+  const x = Math.cos(angle) * ENEMY_SPAWN_RADIUS + CENTERX;
+  const y = Math.sin(angle) * ENEMY_SPAWN_RADIUS + CENTERY;  
 
+  angle = randomHeading(x, y);
+
+  enemy.x = x;
+  enemy.y = y;
+
+  enemy.vx = speed * Math.cos(angle);
+  enemy.vy = speed * Math.sin(angle);
+
+  enemy.angle = angle;
+
+  enemy.collides = 1;
+};
 
 // Main game loop.
 onEnterFrame = (t) => {
@@ -2228,196 +2147,152 @@ onEnterFrame = (t) => {
       spawnCoinX(ACTOR_TYPE_COIN_PICKUP, 250, 'coin0', randomInt(0, 9));
     }
 
-    
-    // if ((coinTrailTimer -= DT) <= 0) {
-    //   coinTrailTimer = randomInt(1, 3);
-    //   let x = (randomInt(0, 12) * 144);
-    //   let y = -500;
-    //   let v = randomInt(220, 270);
-    //   // let v = randomInt(420, 470);
-    //   let frame = randomInt(0, 9);
-    //   for (let i = 5; i--;) {
-    //     spawnCoin(x, (y += 100), v, 'coin0', ACTOR_TYPE_COIN, frame);
-    //     frame = (frame + 2) % 10;
-    //   }
-    // }
-
     MULTIPLIER = clamp(MULTIPLIER + 0.003, 0, 2.5); // Scale base speed of mongols and their projectiles.
 
 // #region Process player.
 
-  const atan2 = M.atan2;
+    const atan2 = M.atan2;
 
-  const playerRotationRate = PI2 * .015;
-  const playerMaxSpeed = 448;
-  const playerAcceleration = 1.617;
+    const playerRotationRate = PI2 * .015;
+    const playerMaxSpeed = 448;
+    const playerAcceleration = 1.617;
 
-  player.speed = clamp(player.speed + playerAcceleration, 0, playerMaxSpeed);
-  
-  if (leftHeld) {
-    player.angle -= playerRotationRate;
+    player.speed = clamp(player.speed + playerAcceleration, 0, playerMaxSpeed);
+    
+    if (leftHeld) {
+      player.angle -= playerRotationRate;
 
-  } else if (rightHeld) {
-    player.angle += playerRotationRate;
-  }
-  
-  player.vx = cos(player.angle) * player.speed;
-  player.vy = sin(player.angle) * player.speed;
-  
-  // Update position
-  player.x += player.vx * DT;
-  player.y += player.vy * DT;
-  
-  // Handle collisions with screen edges
-  if (player.x > WIDTH || player.x < 0) {
-    player.vx *= -1; // Reverse x velocity
-    player.angle = atan2(player.vy, player.vx); // Adjust angle based on new velocity
-    player.x = clamp(player.x, 0, WIDTH); // Clamp position to screen bounds
-  }
-  
-  if (player.y > HEIGHT || player.y < 0) {
-    player.vy *= -1;
-    player.angle = atan2(player.vy, player.vx);
-    player.y = clamp(player.y, 0, HEIGHT);
-  }
-  
-  player.speed = Math.sqrt(player.vx * player.vx + player.vy * player.vy); // Recalculate speed after potential collisions
+    } else if (rightHeld) {
+      player.angle += playerRotationRate;
+    }
+    
+    player.vx = cos(player.angle) * player.speed;
+    player.vy = sin(player.angle) * player.speed;
+    
+    // Update position
+    player.x += player.vx * DT;
+    player.y += player.vy * DT;
+    
+    // Handle collisions with screen edges.
+    if (player.x > WIDTH || player.x < 0) {
+      player.vx *= -1; // Reverse x velocity.
+      player.angle = atan2(player.vy, player.vx); // Adjust angle based on new velocity.
+      player.x = clamp(player.x, 0, WIDTH); // Clamp position to screen bounds.
+    }
+    
+    if (player.y > HEIGHT || player.y < 0) {
+      player.vy *= -1;
+      player.angle = atan2(player.vy, player.vx);
+      player.y = clamp(player.y, 0, HEIGHT);
+    }
+    
+    player.speed = Math.sqrt(player.vx * player.vx + player.vy * player.vy); // Recalculate speed after potential collisions.
 
 
-  egg.x = (CENTERX + 120) - (player.x / 8 );
-  egg.y = (CENTERY + 67.5) - (player.y / 8 );
+    egg.x = (CENTERX + 120) - (player.x / 8 );
+    egg.y = (CENTERY + 67.5) - (player.y / 8 );
 
-  sun.x = (1620 + 120) - (player.x / 16 );
-  sun.y = (290) - (player.y / 16);
+    sun.x = (1620 + 120) - (player.x / 16 );
+    sun.y = (290) - (player.y / 16);
 // #endregion
 
 // #region Process coins.
-  activeCoins.forEach((coin) => {
+    activeCoins.forEach((coin) => {
 
-    let currentFrame = ((elapsedTime % duration / duration) * frames) | 0;
+      let currentFrame = ((elapsedTime % duration / duration) * frames) | 0;
 
-    coin.x += coin.vx * DT * MULTIPLIER;
-    coin.y += coin.vy * DT * MULTIPLIER;
+      coin.x += coin.vx * DT * MULTIPLIER;
+      coin.y += coin.vy * DT * MULTIPLIER;
 
-    renderList.push(coin);
+      renderList.push(coin);
 
-    coin.angle += coin.rotationRate;
+      coin.angle += coin.rotationRate;
 
-    // if (coin.y > HEIGHT + 100) coinsToDelete.push(coin);
+      // if (coin.y > HEIGHT + 100) coinsToDelete.push(coin);
 
-    let dx = coin.x - CENTERX;
-    let dy = coin.y - CENTERY;
-    let distance = Math.sqrt(dx * dx + dy * dy);
+      let dx = coin.x - CENTERX;
+      let dy = coin.y - CENTERY;
+      let distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance > ENEMY_SPAWN_RADIUS + 64) coinsToDelete.push(coin);
+      if (distance > ENEMY_SPAWN_RADIUS + 64) coinsToDelete.push(coin);
 
+      dx = coin.x - player.x;
+      dy = coin.y - player.y;
+      distance = M.sqrt(dx * dx + dy * dy);
 
-
-
-    dx = coin.x - player.x;
-    dy = coin.y - player.y;
-    distance = M.sqrt(dx * dx + dy * dy);
-
-    if (coin.type === ACTOR_TYPE_COIN_PICKUP) {
-      
-      coin.texture = getTextureRegion(`coin${(currentFrame + coin.frame) % frames}`);
-    }
-
-    if (magnetized && coin.type === ACTOR_TYPE_COIN_PICKUP) {
-
-      const attractionRadius = 550;
-      const attractionForce = 200;
-      if (distance < attractionRadius) {
-        const force = attractionForce * (1 - distance / attractionRadius);
-        const directionX = dx / distance;
-        const directionY = dy / distance;
-
-        coin.vx += force * -directionX;
-        coin.vy += force * -directionY;
-      }
-    }
-
-    if ((distance <= coin.radius + player.radius) && collisionsEnabled) {
-      coinsToDelete.push(coin);
-      switch (coin.type) {
-        case ACTOR_TYPE_COIN_PICKUP:
-          pointsToAward += 150;
-          playSound(FX_COIN);
-          spawnCoinShower(coin, 5);
-          break;
-
-        case ACTOR_TYPE_MAGNET_PICKUP:
-          magnetized = 1;
-          magnetCounter += 8;
-          magnetEffectSpawnTimer = 0;
-          playSound(FX_MAGNET);
-          break;
-      
-        case ACTOR_TYPE_SHIELD_PICKUP:
-          shielded = 1;
-          shieldCounter += 8;
-          playSound(FX_SHIELD);
-          break;
-           
-        case ACTOR_TYPE_CLOCK_PICKUP:
-          clocked = 1;
-          clockCounter += 8;
-          clockEffectSpawnTimer = 0;
-          playSound(FX_CLOCK);
-          break;
-      
-        default:
-          break;
+      if (coin.type === ACTOR_TYPE_COIN_PICKUP) {
+        
+        coin.texture = getTextureRegion(`coin${(currentFrame + coin.frame) % frames}`);
       }
 
-    }
-    
-    renderList.push(egg);
+      if (magnetized && coin.type === ACTOR_TYPE_COIN_PICKUP) {
 
-  });
+        const attractionRadius = 550;
+        const attractionForce = 200;
+        if (distance < attractionRadius) {
+          const force = attractionForce * (1 - distance / attractionRadius);
+          const directionX = dx / distance;
+          const directionY = dy / distance;
 
-  // Recycle coins that went past the bottom of the screen.
-  coinsToDelete.forEach((coin) => {
-    activeCoins.delete(coin);
-    coinPool.push(coin);
-  });
+          coin.vx += force * -directionX;
+          coin.vy += force * -directionY;
+        }
+      }
 
-  // if (maxCoins < activeCoins.size) maxCoins = activeCoins.size;
+      if ((distance <= coin.radius + player.radius) && collisionsEnabled) {
+        coinsToDelete.push(coin);
+        switch (coin.type) {
+          case ACTOR_TYPE_COIN_PICKUP:
+            pointsToAward += 150;
+            playSound(FX_COIN);
+            spawnCoinShower(coin, 5);
+            break;
 
+          case ACTOR_TYPE_MAGNET_PICKUP:
+            magnetized = 1;
+            magnetCounter += 8;
+            magnetEffectSpawnTimer = 0;
+            playSound(FX_MAGNET);
+            break;
+        
+          case ACTOR_TYPE_SHIELD_PICKUP:
+            shielded = 1;
+            shieldCounter += 8;
+            playSound(FX_SHIELD);
+            break;
+            
+          case ACTOR_TYPE_CLOCK_PICKUP:
+            clocked = 1;
+            clockCounter += 8;
+            clockEffectSpawnTimer = 0;
+            playSound(FX_CLOCK);
+            break;
+        
+          default:
+            break;
+        }
+
+      }
+      
+      renderList.push(egg);
+
+    });
+
+    // Recycle coins that left the game scene.
+    coinsToDelete.forEach((coin) => {
+      activeCoins.delete(coin);
+      coinPool.push(coin);
+    });
 // #endregion
 
 // #region Process enemies.
-
-
-const respawnActor = (actor, speed) => {
-    
-      let angle = randomAngle();
-      actor.rotationRate = randomRotationDirection();
-
-      const x = Math.cos(angle) * ENEMY_SPAWN_RADIUS + CENTERX;
-      const y = Math.sin(angle) * ENEMY_SPAWN_RADIUS + CENTERY;  
-
-      angle = randomHeading(x, y);
-
-      actor.x = x;
-      actor.y = y;
-
-      actor.vx = speed * Math.cos(angle);
-      actor.vy = speed * Math.sin(angle);
-  
-      actor.angle = angle;
-
-      actor.collides = 1;
-}
-
-
     for (let i = 0; i < enemies.length; i++) {
       const enemy = enemies[i];
 
       let dx = enemy.x - CENTERX;
       let dy = enemy.y - CENTERY;
       let distance = Math.sqrt(dx * dx + dy * dy);
-      if (distance > ENEMY_SPAWN_RADIUS + 64) respawnActor(enemy, randomSpeed());
+      if (distance > ENEMY_SPAWN_RADIUS + 64) respawnEnemy(enemy, randomSpeed());
 
       if (enemy.collides && collisionsEnabled) { // Only check collision if the enemy allows for it. Enemies who have been deflected do not collide.
 
@@ -2429,8 +2304,6 @@ const respawnActor = (actor, speed) => {
           const nx = dx / distance;
           const ny = dy / distance;
           const overlap = enemy.radius + player.radius - distance;
-          // const dotProduct = enemy.vx * nx + enemy.vy * ny;
-          // const dotProduct = 200 * nx + 200 * ny;
           const dotProduct = -player.vx * nx + -player.vy * ny;
         
           enemy.x += nx * overlap / 2;
@@ -2466,57 +2339,30 @@ const respawnActor = (actor, speed) => {
 
         if (distance <= enemy.radius + player.radius) { // there was a collision, resolve it.
 
-          // Between the following angles the player can deflect the enemy and be rewarded.
-          // const angleInDegrees = (enemy.angle * (180 / PI)) % 360;
-          // if (angleInDegrees > 70 && angleInDegrees < 130) {
 
-          //   pointsToAward += 2000;
-          //   spawnStarShower(enemy, 30);
-          //   deflectEnemy();
+          if (shieldCounter > 0 ) { // Player is shielded so bounce the enemy off and award points.
 
-          // } else {
+            deflectEnemy();
 
-            // For all other anlges the player deflects the enemy if they are shielded, or dies.
+            pointsToAward += 250;
 
-            if (shieldCounter > 0 ) { // Player is shielded so bounce the enemy off and award points.
+          } else {
 
-              deflectEnemy();
+            gameOver();
 
-              pointsToAward += 250;
-
-            } else {
-
-              gameOver();
-
-            }
-          // }
+          }
 
         }
 
-      } else { // Constrain enemy velocity.
-
-        // enemy.vy = clamp(enemy.vy += 20, -900, 2000);
-
       }
-
 
       // Update enemy position after collision check.
       const timeShift = (clocked) ? .2 : 1;
+
       enemy.y += enemy.vy * MULTIPLIER * DT * timeShift;
       enemy.x += enemy.vx * MULTIPLIER * DT * timeShift;
 
       enemy.angle += enemy.rotationRate;
-
-      // Wrap enemy position if it goes off the screen.
-      // if (enemy.y > HEIGHT + 72) {
-      //   enemy.y = randomYPosition();
-      //   enemy.vy = randomVelocity();
-      //   enemy.vx = 0;
-      //   enemy.x = (enemy.lane * 144) + 72;
-      //   enemy.collides = 1;
-      //   enemy.angle = randomAngle();
-      //   enemy.rotationRate = -PI2 * .005 + (random() * (PI2 * .010));
-      // }
 
       renderList.push(enemy);
     }
@@ -2534,56 +2380,29 @@ const respawnActor = (actor, speed) => {
     
     rope.update(DT);
   
-    // const tt = getTextureRegion('rope');
-    
     for (i = 0; i < points.length; i++) {
       let p = points[i];
   
-      const prev = i > 0 ? points[i - 1] : null;
-  
-      // if (prev) {
-      //   // let x = lerp(prev.pos.x, p.pos.x, 0.5);
-      //   // let y = lerp(prev.pos.y, p.pos.y, 0.5);
+      // const prev = i > 0 ? points[i - 1] : null;
 
-      //   // p.x = p.pos.x;//lerp(prev.pos.x, p.pos.x, 0.5);
-      //   // p.y = p.pos.y;//lerp(prev.pos.y, p.pos.y, 0.5);
-  
-      //   // p.x = lerp(prev.pos.x, p.pos.x, 0.5) - 24;
-      //   // p.y = lerp(prev.pos.y, p.pos.y, 0.5) - 24;
+      p.x = p.pos.x;
+      p.y = p.pos.y;
 
-      //   // let a = angleBetweenVectors(prev.pos, p.pos);
-
-      //   // p.angle = a;
-  
-      //   // setHTML(playerScoreLabel, player.angle)
-      //   // gl2_drawImage(tt.x, tt.y, tt.w, tt.h, x, y, tt.w, tt.h, 0xffffff7f, 0);
-      // } else {
-      //   // log(p);
-      //   // paused = 1;
-      //   // p.x = p.pos.x;
-      //   // p.y = p.pos.y;
-      // }
-
-      p.x = p.pos.x;//lerp(prev.pos.x, p.pos.x, 0.5);
-      p.y = p.pos.y;//lerp(prev.pos.y, p.pos.y, 0.5);
-
-      // log(p)
       renderList.push(p);
     }
-    // paused = 1
   
-      renderList.push(player);
-      if (shielded) {
-        shieldOverlay.x = player.x;
-        shieldOverlay.y = player.y;
-        renderList.push(shieldOverlay);
-      }
+    renderList.push(player);
+    if (shielded) {
+      shieldOverlay.x = player.x;
+      shieldOverlay.y = player.y;
+      renderList.push(shieldOverlay);
+    }
   
   } // END game playing 
 
   renderList.push(sun);
 
-// #region Process parallax clouds.
+// #region Process parallax stars.
 
   let vx, vy;
 
@@ -2592,10 +2411,11 @@ const respawnActor = (actor, speed) => {
     starfield.speed = player.speed;
     starfield.vx = player.vx;
     starfield.vy = player.vy;
-  } else if (gameMode === GAME_MODE_GAMEOVER) {
+
+  } else if (gameMode === GAME_MODE_GAMEOVER) { // Transition stars to be moving in the desired direction for the main menu.
+
     starfield.speed = lerp(starfield.speed, 100, 10 * DT);
     starfield.angle = lerp(starfield.angle, 0, 10 * DT);
-    // velocity.vy = lerp(velocity.vy, targetVelocity.vy, lerpFactor * deltaTime);
   }
 
   vx = starfield.vx = cos(starfield.angle) * starfield.speed;
@@ -2615,11 +2435,9 @@ const respawnActor = (actor, speed) => {
 
     renderList.push(star);
   }
-
+// #endregion
 
 // #region Render game scene.
-
-
 
   updateParticles(); // Particles appear on top of everything else, so they don't need to be added to `renderList` before sorting.
     
@@ -2632,9 +2450,7 @@ const respawnActor = (actor, speed) => {
     const actor = renderList[i];
     const r = actor.texture;
 
-
     gl2_drawImage(r.x, r.y, r.w, r.h, actor.x - r.w / 2, actor.y - r.h / 2, r.w * actor.scale, r.h * actor.scale, normal + actor.alpha * 127, actor.angle);
-
   }
 
   gl2_drawEverything();

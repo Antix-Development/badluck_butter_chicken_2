@@ -58,7 +58,7 @@ All other functionality remains the same, it just has a few more configurable op
 
 ## Pushing the Envelope
 
-This year I really didn't push very hard at the 13Kb limit. This game comes in at a whopping 11,303 bytes, which is 2,009 bytes short of the limit!
+This year I really didn't push very hard at the 13Kb limit. This game comes in at a whopping 11,305 bytes, which is 2,007 bytes short of the limit!
 
 Now that my engine is pretty much sorted I feel that next year I'll try and push the limit as far as I can.
 
