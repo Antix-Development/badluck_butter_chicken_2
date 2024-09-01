@@ -1246,9 +1246,9 @@ const allAssetsLoaded = e => {
   // 
 
   const newStar = layer => stars.push(newActor(ACTOR_TYPE_STAR, randomInt(0, WIDTH), randomInt(0, HEIGHT), 0, 0, getTextureRegion(`star${layer}`), 0, 1, 1, 0, 0));
-  for (let i = 100; i--;) newStar(1);
-  for (let i = 75; i--;) newStar(2);
   for (let i = 50; i--;) newStar(3);
+  for (let i = 75; i--;) newStar(2);
+  for (let i = 100; i--;) newStar(1);
 
   // 
   // Create the pre game menu.
@@ -2417,7 +2417,7 @@ onEnterFrame = (t) => {
 
   for (let i = 225; i--;) {
     const star = stars[i];
-    const speedFactor = i < 50 ? .3 : i < 125 ? .5 : 1;
+    const speedFactor = i > 124 ? .3 : i > 49 ? .5 : 1;
     star.x -= vx * speedFactor * DT;
     star.y -= vy * speedFactor * DT;
 
